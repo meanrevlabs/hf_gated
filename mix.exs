@@ -29,7 +29,13 @@ defmodule HfGated.MixProject do
     [
       description: "Read files from gated/private Hugging Face datasets " <>
         "with a token; parquet straight into Explorer.DataFrame.",
-      licenses: ["MIT"]
+      licenses: ["MIT"],
+      links: %{
+        "GitHub" => "https://github.com/meanrevlabs/hf_gated",
+        "Changelog" => "https://github.com/meanrevlabs/hf_gated/blob/main/CHANGELOG.md"
+      },
+      files: ["lib", "mix.exs", "README.md", "LICENSE", "CHANGELOG.md"]
     ]
   end
+
 end

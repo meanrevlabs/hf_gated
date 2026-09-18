@@ -14,7 +14,10 @@ defmodule HfGated do
 
   ## Functions
 
-    - `fetch_file/3` - any file as `{:ok, binary}`
+    - `fetch_file/3` - any file as `{:ok, binary}`; omit
+      `:token` for public datasets
+    - `fetch_file!/3` - same, but returns the binary directly
+      and raises on error
     - `fetch!/3` - parquet -> `Explorer.DataFrame` (raises on
       error: a client notebook should fail with a clear
       message instead of silently working with nil)
@@ -27,7 +30,6 @@ defmodule HfGated do
 
   Public datasets work without a token; gated ones require
   `token:` (401 otherwise).
-
   """
 
   @default_base "https://huggingface.co/datasets"
@@ -79,6 +81,29 @@ defmodule HfGated do
         {:error, {:network, reason}}
     end
   end
+
+
+  @doc """
+  Like `fetch_file/3`, but returns the binary directly and
+  raises on error.
+  """
+  @spec fetch_file!(String.t(), String.t(), keyword()) :: binary() | no_return()
+  def fetch_file!(dataset_id, path_in_repo, opts) do
+    case fetch_file(dataset_id, path_in_repo, opts) do
+      {:ok, binary} ->
+        binary
+
+      {:error, :unauthorized} ->
+        raise "401: invalid token or no access to #{dataset_id}"
+
+      {:error, :not_found} ->
+        raise "404: file #{path_in_repo} not found in #{dataset_id}"
+
+      {:error, reason} ->
+        raise "Fetch failed: #{inspect(reason)}"
+    end
+  end
+
 
   @doc """
   Fetches a parquet file and reads it into `Explorer.DataFrame`.

@@ -12,6 +12,7 @@ defmodule HfGatedTest do
 
   test "public API: two functions with correct arities" do
     assert function_exported?(HfGated, :fetch_file, 3)
+    assert function_exported?(HfGated, :fetch_file!, 3)
     assert function_exported?(HfGated, :fetch!, 3)
   end
 

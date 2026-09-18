@@ -24,3 +24,4 @@ hf_gated-*.tar
 
 mix.lock
 .elixir_ls/
+.formatter.exs

@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.1.1
+
+- `:token` is now optional: public datasets can be fetched
+  without any token; gated datasets still require one (401
+  otherwise)
+
 ## v0.1.0
 
 - `fetch_file/3` - fetch any file from a gated dataset as `{:ok, binary}`

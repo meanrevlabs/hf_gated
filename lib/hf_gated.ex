@@ -24,33 +24,41 @@ defmodule HfGated do
   401 (bad token / no access), 404 (file not found), network
   failures, and non-parquet payloads are all reported with
   readable messages.
+
+  Public datasets work without a token; gated ones require
+  `token:` (401 otherwise).
+
   """
 
   @default_base "https://huggingface.co/datasets"
 
   @doc """
-  Fetches a file from a gated dataset.
+  Fetches a file from a dataset (gated or public).
 
   Returns `{:ok, binary}` or `{:error, reason}`. The binary can
   be saved or processed further on your own.
 
   ## Options
 
-    - `:token` - HF read token (required)
+    - `:token` - HF read token. Required for gated/private
+      datasets; omit it for public ones.
     - `:revision` - branch or tag (default `"main"`)
     - `:base_url` - host override (useful in tests)
   """
   @spec fetch_file(String.t(), String.t(), keyword()) ::
           {:ok, binary()} | {:error, term()}
   def fetch_file(dataset_id, path_in_repo, opts) do
-    token = Keyword.fetch!(opts, :token)
+    token = Keyword.get(opts, :token)
     revision = Keyword.get(opts, :revision, "main")
     base = Keyword.get(opts, :base_url, @default_base)
 
     url = "#{base}/#{dataset_id}/resolve/#{revision}/#{path_in_repo}"
 
+    headers =
+      if token, do: [{"authorization", "Bearer #{token}"}], else: []
+
     case Req.get(url,
-           headers: [{"authorization", "Bearer #{token}"}],
+           headers: headers,
            redirect: true,
            decode_body: false,
            retry: :transient

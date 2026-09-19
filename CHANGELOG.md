@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.1.3
+
+- `opts` defaults to `[]`: `fetch!/2`, `fetch_file!/2` and
+  `fetch_file/2` now work without the third argument
+  (e.g. `HfGated.fetch!(ds, path)` for public datasets)
+
+- dependency bump: mint patched (EEF-CVE-2026-82672)
+
 ## v0.1.2
 
 - `fetch_file!/3` added - the README of 0.1.1 documented it,

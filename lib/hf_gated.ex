@@ -49,7 +49,7 @@ defmodule HfGated do
   """
   @spec fetch_file(String.t(), String.t(), keyword()) ::
           {:ok, binary()} | {:error, term()}
-  def fetch_file(dataset_id, path_in_repo, opts) do
+  def fetch_file(dataset_id, path_in_repo, opts \\ []) do
     token = Keyword.get(opts, :token)
     revision = Keyword.get(opts, :revision, "main")
     base = Keyword.get(opts, :base_url, @default_base)
@@ -88,7 +88,7 @@ defmodule HfGated do
   raises on error.
   """
   @spec fetch_file!(String.t(), String.t(), keyword()) :: binary() | no_return()
-  def fetch_file!(dataset_id, path_in_repo, opts) do
+  def fetch_file!(dataset_id, path_in_repo, opts \\ []) do
     case fetch_file(dataset_id, path_in_repo, opts) do
       {:ok, binary} ->
         binary
@@ -114,7 +114,7 @@ defmodule HfGated do
   """
   @spec fetch!(String.t(), String.t(), keyword()) ::
           Explorer.DataFrame.t() | no_return()
-  def fetch!(dataset_id, path_in_repo, opts) do
+  def fetch!(dataset_id, path_in_repo, opts \\ []) do
     case fetch_file(dataset_id, path_in_repo, opts) do
       {:ok, body} ->
         case binary_part(body, 0, 4) do

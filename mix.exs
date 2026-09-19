@@ -1,7 +1,7 @@
 defmodule HfGated.MixProject do
   use Mix.Project
 
-  @version "0.1.2"
+  @version "0.1.3"
 
   def project do
     [
@@ -19,6 +19,7 @@ defmodule HfGated.MixProject do
 
   defp deps do
     [
+      {:mint, "~> 1.10.1", override: true},  # или выше - что укажет advisory
       {:req, "~> 0.7.4"},
       {:explorer, "~> 0.12.0"},
       {:ex_doc, "~> 0.34", only: :dev, runtime: false}

@@ -29,4 +29,10 @@ defmodule HfGatedTest do
              )
   end
 
+  test "public API: two-arity calls supported (opts defaults)" do
+    assert function_exported?(HfGated, :fetch!, 2)
+    assert function_exported?(HfGated, :fetch_file, 2)
+    assert function_exported?(HfGated, :fetch_file!, 2)
+  end
+
 end
